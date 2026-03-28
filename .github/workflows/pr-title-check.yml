@@ -12,9 +12,9 @@ jobs:
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
-          if echo "$PR_TITLE" | grep -qP '[A-Z]+-\d+'; then
-            echo "PR title contains a Linear ticket ID."
+          if echo "$PR_TITLE" | grep -qP '^[A-Z]+-\d+\b'; then
+            echo "PR title starts with a Linear ticket ID."
           else
-            echo "::warning::PR title should contain a Linear ticket ID (e.g., ENG-123)"
+            echo "::warning::PR title must start with a Linear ticket ID (e.g., \"ENG-123: Add feature\")"
             exit 1
           fi
