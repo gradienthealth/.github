@@ -15,7 +15,9 @@ jobs:
         run: |
           if echo "$PR_TITLE" | grep -qPi '^[A-Z]+[-\s]\d+\b'; then
             echo "PR title starts with a Linear ticket ID."
+          elif echo "$PR_TITLE" | grep -qPi '^NO-TICKET\b'; then
+            echo "::notice::PR explicitly opted out of ticket association."
           else
-            echo "::warning::PR title must start with a Linear ticket ID (e.g., \"ENG-123: Add feature\")"
+            echo "::error::PR title must start with a Linear ticket ID (e.g., \"ENG-123: Add feature\") or \"NO-TICKET:\" to opt out."
             exit 1
           fi
