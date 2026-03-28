@@ -9,15 +9,15 @@ jobs:
     if: ${{ github.event.pull_request.user.type != 'Bot' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Check for Linear ticket ID
+      - name: Check for Linear issue ID
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
           if echo "$PR_TITLE" | grep -qPi '^[A-Z]+[-\s]\d+\b'; then
-            echo "PR title starts with a Linear ticket ID."
+            echo "PR title starts with a Linear issue ID."
           elif echo "$PR_TITLE" | grep -qPi '^NO-TICKET\b'; then
-            echo "::notice::PR explicitly opted out of ticket association."
+            echo "::notice::PR explicitly opted out of issue association."
           else
-            echo "::error::PR title must start with a Linear ticket ID (e.g., \"ENG-123: Add feature\") or \"NO-TICKET:\" to opt out."
+            echo "::error::PR title must start with a Linear issue ID (e.g., \"ENG-123: Add feature\") or \"NO-TICKET:\" to opt out."
             exit 1
           fi
