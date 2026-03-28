@@ -1,0 +1,20 @@
+name: PR Title Check
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  check-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for Linear ticket ID
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          if echo "$PR_TITLE" | grep -qPi '^[A-Z]+[-\s]\d+\b'; then
+            echo "PR title starts with a Linear ticket ID."
+          else
+            echo "::warning::PR title must start with a Linear ticket ID (e.g., \"ENG-123: Add feature\")"
+            exit 1
+          fi
