@@ -6,14 +6,16 @@ on:
 
 jobs:
   check-title:
-    if: ${{ github.event.pull_request.user.type != 'Bot' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check for Linear issue ID
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_AUTHOR_TYPE: ${{ github.event.pull_request.user.type }}
         run: |
-          if echo "$PR_TITLE" | grep -qPi '^[A-Z]+[-\s]\d+\b'; then
+          if [ "$PR_AUTHOR_TYPE" = "Bot" ]; then
+            echo "Bot PR — skipping check."
+          elif echo "$PR_TITLE" | grep -qPi '^[A-Z]+[-\s]\d+\b'; then
             echo "PR title starts with a Linear issue ID."
           elif echo "$PR_TITLE" | grep -qPi '^NO-ISSUE\b'; then
             echo "::notice::PR explicitly opted out of issue association."
