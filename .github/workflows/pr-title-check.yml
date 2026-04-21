@@ -21,9 +21,13 @@ jobs:
             echo "Bot PR — skipping check."
           elif echo "$PR_TITLE" | grep -qPi '^[A-Z]+[-\s]\d+\b'; then
             echo "PR title starts with a Linear issue ID."
+          elif echo "$PR_TITLE" | grep -qP '^[a-z]+(\([^)]*[A-Z]+[-\s]\d+[^)]*\))!?:'; then
+            echo "PR title is a Conventional Commit with a Linear issue ID in scope."
           elif echo "$PR_TITLE" | grep -qPi '^NO-ISSUE\b'; then
             echo "::notice::PR explicitly opted out of issue association."
+          elif echo "$PR_TITLE" | grep -qPi '^[a-z]+(\([^)]*\))?!?:\s*NO-ISSUE\b'; then
+            echo "::notice::PR explicitly opted out of issue association (conventional commit style)."
           else
-            echo "::error::PR title must start with a Linear issue ID (e.g., \"ENG-123: Add feature\") or \"NO-ISSUE:\" to opt out."
+            echo "::error::PR title must start with a Linear issue ID (e.g., \"ENG-123: Add feature\"), include one in a conventional-commit scope (e.g., \"feat(ENG-123): add feature\"), or use \"NO-ISSUE\" to opt out."
             exit 1
           fi
