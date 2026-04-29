@@ -25,6 +25,8 @@ jobs:
             echo "PR title is a Conventional Commit with a Linear issue ID in scope."
           elif echo "$PR_TITLE" | grep -qPi '^NO-ISSUE\b'; then
             echo "::notice::PR explicitly opted out of issue association."
+          elif echo "$PR_TITLE" | grep -qP '^[a-z]+\(NO-ISSUE\)!?:'; then
+            echo "::notice::PR explicitly opted out of issue association (NO-ISSUE in conventional commit scope)."
           elif echo "$PR_TITLE" | grep -qPi '^[a-z]+(\([^)]*\))?!?:\s*NO-ISSUE\b'; then
             echo "::notice::PR explicitly opted out of issue association (conventional commit style)."
           else
